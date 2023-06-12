@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Credit Card Type and Mask</title>
+  <link rel="stylesheet" href="card.css">
+  <link rel="stylesheet" href="form.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-inner">
+        <div class="front">
+          <img src="https://i.ibb.co/PYss3yv/map.png" class="map-img">
+          <div class="row">
+            <img src="https://i.ibb.co/G9pDnYJ/chip.png" width="60px">
+            <img src="https://i.ibb.co/WHZ3nRJ/visa.png" width="60px">
+          </div>
+          <div class="row card-no">
+            <p id="card-number-display">#### #### #### ####</p>
+          </div>
+          <div class="row card-holder">
+            <p id="card-holder-display">CARD HOLDER</p>
+            <p id="valid-till-display">Date of Birth</p>
+          </div>
+          <div class="row name">
+            <p id="name-display">####</p>
+            <p id="expiry-display">##/##</p>
+          </div>
+        </div>
+        <div class="back">
+          <img src="https://i.ibb.co/PYss3yv/map.png" class="map-img">
+          <div class="bar"></div>
+          <div class="row card-cvv">
+            <div>
+              <img src="https://i.ibb.co/S6JG8px/pattern.png">
+            </div>
+            <p id="cvv-display">***</p>
+          </div>
+          <div class="row signature">
+            <p>CUSTOMER SIGNATURE</p>
+            <img src="https://i.ibb.co/WHZ3nRJ/visa.png" width="80px">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form id="card-form">
+    <label for="card-number">Card Number:</label>
+    <input type="text" id="card-number" name="card-number" required>
+
+    <label for="card-holder">Card Holder:</label>
+    <input type="text" id="card-holder" name="card-holder" required>
+
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" name="dob" required>
+
+    <label for="cvv">CVV:</label>
+    <input type="password" id="cvv" name="cvv" required>
+
+    <input type="submit" value="Submit">
+  </form>
+
+  <script>
+ // JavaScript code
+document.addEventListener("DOMContentLoaded", function() {
+  const cardForm = document.getElementById("card-form");
+  const cardNumberInput = document.getElementById("card-number");
+  const cardHolderInput = document.getElementById("card-holder");
+  const dobInput = document.getElementById("dob");
+  const cvvInput = document.getElementById("cvv");
+  const cardNumberDisplay = document.getElementById("card-number-display");
+  const cardHolderDisplay = document.getElementById("card-holder-display");
+  const validTillDisplay = document.getElementById("valid-till-display");
+  const nameDisplay = document.getElementById("name-display");
+  const expiryDisplay = document.getElementById("expiry-display");
+  const cvvDisplay = document.getElementById("cvv-display");
+  const card = document.querySelector(".card");
+
+  cardForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    // Get form input values
+    const cardNumber = cardNumberInput.value;
+    const cardHolder = cardHolderInput.value;
+    const dob = dobInput.value;
+    const cvv = cvvInput.value;
+
+    // Update card display with form input values
+    cardNumberDisplay.textContent = maskCardNumber(cardNumber);
+    cardHolderDisplay.textContent = cardHolder.toUpperCase();
+    validTillDisplay.textContent = getFormattedExpiryDate(dob);
+    nameDisplay.textContent = cardHolder.toUpperCase();
+    expiryDisplay.textContent = getFormattedExpiryDate(dob);
+    cvvDisplay.textContent = cvv;
+
+    // Reset form inputs
+    cardForm.reset();
+  });
+
+  // Add event listener to the card for hover effect
+  card.addEventListener("mouseenter", function() {
+    // Flip the card to show the back side
+    card.classList.add("flipped");
+  });
+
+  card.addEventListener("mouseleave", function() {
+    // Flip the card back to the front
+    card.classList.remove("flipped");
+  });
+
+  function maskCardNumber(cardNumber) {
+    // Mask all but the last 4 digits of the card number
+    const lastFourDigits = cardNumber.slice(-4);
+    const maskedDigits = "*".repeat(cardNumber.length - 4);
+    return maskedDigits + lastFourDigits;
+  }
+
+  function getFormattedExpiryDate(dob) {
+    // Format the date of birth (MM/YY) as the card expiry date
+    const date = new Date(dob);
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear().toString().slice(-2);
+    return `${month} / ${year}`;
+  }
+});
+
+  </script>
+</body>
+</html>
